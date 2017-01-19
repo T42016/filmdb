@@ -35,10 +35,10 @@
 		<form method="post" action="dologin.php">
 		<table>
 			<tr>
-			<td>Anv&auml;ndarnamn &nbsp;</td><td><input name="userid" type="text" id="userid" class="text" maxlength="255" /></td>
+			<td>Användarnamn &nbsp;</td><td><input name="userid" type="text" id="userid" class="text" maxlength="255" /></td>
 			</tr>
 			<tr>
-			<td>L&ouml;senord</td><td><input name="password" type="password" id="password" class="text" maxlength="255" /> </td>
+			<td>Lösenord</td><td><input name="password" type="password" id="password" class="text" maxlength="255" /> </td>
 			</tr>
 			<tr><td></td><td>
 		<p class="right">
