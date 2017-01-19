@@ -1,0 +1,37 @@
+ul.ui-autocomplete{
+	width:220px;
+	background-color:#f5f5f5;
+	border:1px solid #fff;
+	outline:1px solid #ccc;
+	padding: 0px;
+	font-size: 12px;
+}
+
+ul.ui-autocomplete li{
+	list-style:none;
+	border-bottom:1px solid #e0e0e0;
+	border-top:1px solid #fff;
+}
+
+ul.ui-autocomplete li:first-child{
+	border-top:none;
+}
+
+
+ul.ui-autocomplete li:last-child{
+	border-bottom:none;
+}
+
+ul.ui-autocomplete li a{
+	color:#999;
+	border:none !important;
+	text-decoration:none !important;
+	padding:5px 5px;
+	display:block;
+}
+
+#ui-active-menuitem{
+	background-color:#fff;
+	color:#666;
+	cursor:pointer;
+}
