@@ -47,7 +47,7 @@ while($line = db_fetch_array($res))
 		echo "<td></td>";
 		
 	echo "<td>
-			<a href='locations.php?edit=true&amp;id=$line[places_id]' title='Ändra'><img src='img/icon/icon_edit.png' alt='' /></a>
+			<a href='locations.php?edit=true&amp;id=$line[places_id]' title='ï¿½ndra'><img src='img/icon/icon_edit.png' alt='' /></a>
 			<a href='dodellocation.php?id=$line[places_id]' title='Ta bort' onclick=\"return confirm('Vill du verkligen ta bort lagringsplatsen?');\">
 				<img src='img/icon/icon_del.png' alt='' />
 			</a>
@@ -93,7 +93,7 @@ while($line = db_fetch_array($res))
 			echo "<td></td>";
 			
 		echo "<td>
-				<a href='locations.php?edit=true&amp;id=$line[places_id]' title='Ändra'><img src='img/icon/icon_edit.png' alt='' /></a>
+				<a href='locations.php?edit=true&amp;id=$line[places_id]' title='ï¿½ndra'><img src='img/icon/icon_edit.png' alt='' /></a>
 				<a href='dodellocation.php?id=$line[places_id]' title='Ta bort' onclick=\"return confirm('Vill du verkligen ta bort lagringsplatsen?');\">
 					<img src='img/icon/icon_del.png' alt='' />
 				</a>
@@ -116,14 +116,14 @@ while($line = db_fetch_array($res))
 	<?php
 		if($edit == true)
 		{
-			echo '<h1>Ändra lagring</h1>';
+			echo '<h1>Ã„ndra lagring</h1>';
 			echo '<form action="doeditlocation.php" method="post" >';
 			echo "<input type='hidden' name='id' value='$info[places_id]' />";
 		}
 		else
 		{
 			$info['places_name'] = "";
-			echo '<h1>Lägg till lagring</h1>';
+			echo '<h1>LÃ¤gg till lagring</h1>';
 			echo '<form action="doaddlocation.php" method="post">';
 		}
 	?>
@@ -134,7 +134,7 @@ while($line = db_fetch_array($res))
 			if($edit==false || $info['places_show'] == 1) 
 				echo 'checked="checked"'; 
 		?> /></td></tr>
-		<tr><td></td><td><input type="submit" value="<?php if($edit == true) echo "Uppdatera"; else echo "Lägg till"; ?>" class="loginbutton" /></td></tr>
+		<tr><td></td><td><input type="submit" value="<?php if($edit == true) echo "Uppdatera"; else echo "Lï¿½gg till"; ?>" class="loginbutton" /></td></tr>
 		</table>
 	</form>
 	<div class="clear">&nbsp;</div>

@@ -4,13 +4,13 @@
 		jonas.nilsson@ec.se
 	*/
 
-	$db_handle = 0;
+	//$db_handle = 0;
 
 	$db;
 
 	function db_connect()
 	{
-		/*//Ändra till inställningar som passar de MySQL inställningar ni har.
+		/*//ï¿½ndra till instï¿½llningar som passar de MySQL instï¿½llningar ni har.
 		//
 
 		$db_host = "localhost";
@@ -38,31 +38,28 @@
 	{
 		global $db;
 		$stmt = $db->prepare($query);
-		return $stmt->execute();
+        $stmt->execute();
+		return $stmt->fetchAll();
 		/*$ret = mysql_query($query) or die("query failed : " . mysql_error());
 		return $ret;*/
 	}
 
 	function db_fetch_array($res)
 	{
-		global $db;
-		$stmt = $db->prepare($res);
-		return $stmt->fetchall();
+		return $res;
 		//return mysql_fetch_array($res, $type);
 	}
 
 	function db_num_rows($res)
 	{
-		global $db;
-		$stmt = $db->prepare('SELECT * FROM '.$res);
-		return count($stmt->execute());
+		return count($res);
 		//return mysql_num_rows($res);
 	}
 
 	function db_get_insert_id()
 	{
-		global $db_handle;
-		return mysql_insert_id($db_handle);
+		global $db;
+		return $db->lastInsertId();;
 	}
 	function db_escape($text)
 	{
