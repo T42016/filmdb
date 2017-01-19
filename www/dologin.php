@@ -6,8 +6,8 @@
 		
 	if(isset($_POST['userid']) && isset($_POST['password']))
 	{
-		$user = mysql_real_escape_string($_POST['userid']);
-		$pass = mysql_real_escape_string($_POST['password']);		
+		$user = htmlspecialchars($_POST['userid']);
+		$pass = htmlspecialchars($_POST['password']);
 		$query = "SELECT * FROM users WHERE user_name = '$user' AND user_passw = MD5('$pass')";
 
 		$res = db_query($query);

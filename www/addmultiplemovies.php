@@ -52,7 +52,7 @@
 		<td>Titlar</td><td><textarea type="text" class="text" id="titles" name="titles" cols="40" rows="11" ></textarea> </td><td></td>
 	</tr>
 	<tr>
-		<td></td><td><input type="submit" name="Submit" value="Lägg till" class="loginbutton"/></td><td></td>
+		<td></td><td><input type="submit" name="Submit" value="Lï¿½gg till" class="loginbutton"/></td><td></td>
 	</tr>
 </table>
 </form>

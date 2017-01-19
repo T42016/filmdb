@@ -305,7 +305,7 @@ class TMDBv3{
 			$error_message = curl_error($ch);
 
 			curl_close($ch);
-			// header('Content-Type: text/html; charset=iso-8859-1');
+			// header('Content-Type: text/html; charset=UTF-8');
 			//echo"<pre>";print_r(($results));echo"</pre>";
 			$results = json_decode(($results),true);
 			return (array) $results;

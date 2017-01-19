@@ -16,7 +16,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">  
 <head> 
 	<meta http-equiv="Expires" content="0" /> 
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>YMDB</title> 
 	<link rel="SHORTCUT ICON" href="favicon.ico" />
 	<link rel="stylesheet" href="css/default.css" type="text/css" /> 
@@ -35,10 +35,10 @@
 		<form method="post" action="dologin.php">
 		<table>
 			<tr>
-			<td>Anv&auml;ndarnamn &nbsp;</td><td><input name="userid" type="text" id="userid" class="text" maxlength="255" /></td>
+			<td>Användarnamn &nbsp;</td><td><input name="userid" type="text" id="userid" class="text" maxlength="255" /></td>
 			</tr>
 			<tr>
-			<td>L&ouml;senord</td><td><input name="password" type="password" id="password" class="text" maxlength="255" /> </td>
+			<td>Lösenord</td><td><input name="password" type="password" id="password" class="text" maxlength="255" /> </td>
 			</tr>
 			<tr><td></td><td>
 		<p class="right">
