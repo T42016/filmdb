@@ -43,7 +43,7 @@
 		return $ret;*/
 	}
 
-	function db_fetch_array($res, $type=MYSQL_ASSOC)
+	function db_fetch_array($res)
 	{
 		global $db;
 		$stmt = $db->prepare($res);
