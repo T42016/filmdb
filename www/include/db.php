@@ -11,36 +11,31 @@ function db_connect()
 	//Ändra till inställningar som passar de MySQL inställningar ni har.
 	//
 		
-	$db_host = "localhost";
-	$db_user = "skolk_se";
-	$db_pass = "khjAXMQt";
-	$db_db = "skolk_se";
+	
 	global $db_handle;
-	$db_handle = mysql_connect($db_host, $db_user, $db_pass) or die("Couldn't connect to database : " . mysql_error());
-	mysql_set_charset('utf8',$db_handle);
-	mysql_select_db($db_db) or die("Couldn't select database");
+	$db_handle = new PDO('mysql:host=localhost;dbname=ymdb;charset=utf8mb4', 'root', '');
 }
 
 function db_disconnect() 
 {
-	global $db_handle;
-	mysql_close($db_handle);
 }
 
 function db_query($query) 
 {
-	$ret = mysql_query($query) or die("query failed : " . mysql_error());
-	return $ret;
+	global $db_handle;
+	$stmt = $db_handle->prepare($query);
+	$stmt->execute();
+	return $stmt;
 }
 
-function db_fetch_array($res, $type=MYSQL_ASSOC) 
+function db_fetch_array($res) 
 {
-	return mysql_fetch_array($res, $type);
+	return $res->fetchAll();
 }
 
 function db_num_rows($res) 
 {
-	return mysql_num_rows($res);
+	return $res->rowCount();
 }
 
 function db_get_insert_id()

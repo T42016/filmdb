@@ -20,7 +20,7 @@
 		<td>Titel</td><td><input type="text" class="text" id="title" name="title" /> </td><td></td>
 	</tr>
 	<tr>
-		<td>IMDB</td><td><input type="text" class="text" id="imdb" name="imdb" /></td><td><!--<span class="info">Lämna blank för automatisk identifiering</span>--></td>
+		<td>IMDB</td><td><input type="text" class="text" id="imdb" name="imdb" /></td><td><!--<span class="info">LÃ¤mna blank fÃ¶r automatisk identifiering</span>--></td>
 	</tr>
 	<tr>
 		<td>Format</td>
@@ -55,7 +55,7 @@
 		</td><td></td>
 	</tr>
 	<tr>
-		<td></td><td></td><td><input type="submit" name="Submit" value="Lägg till" class="loginbutton"/></td>
+		<td></td><td></td><td><input type="submit" name="Submit" value="LÃ¤gg till" class="loginbutton"/></td>
 	</tr>
 </table>
 </form>
