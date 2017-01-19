@@ -33,6 +33,11 @@
 <table class="list" cellspacing="0">
 <?php
 $i =0;
+
+echo "<pre>";
+print_r(db_fetch_array($res));
+echo "</pre>";
+
 while($line = db_fetch_array($res))
 {
 	if($i & 1)

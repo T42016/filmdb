@@ -39,14 +39,14 @@
 		global $db;
 		$stmt = $db->prepare($query);
         $stmt->execute();
-		return $stmt->fetchAll();
+		return $stmt;
 		/*$ret = mysql_query($query) or die("query failed : " . mysql_error());
 		return $ret;*/
 	}
 
 	function db_fetch_array($res)
 	{
-		return $res;
+		return $res->fetchAll();
 		//return mysql_fetch_array($res, $type);
 	}
 
