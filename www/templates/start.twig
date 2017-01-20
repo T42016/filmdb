@@ -49,6 +49,27 @@
 	</p>
 
     <table class='list' cellspacing='0'>
+
+    {% for movie in movies %}
+        {% if loop.index0 is even %} <tr><td></td>
+        {% else %} <tr class='odd'><td class='tableleft'>&nbsp;</td>{% endif %}
+
+        <td><a id='id{{ movie.id }}' href='movie.php?id={{ movie.id }}&amp;KeepThis=true&amp;TB_iframe=true&amp;height=380&amp;width=640' class='thickbox' title='Info'>
+        {% if movie.title|length > 45 %}{{ movie.title|slice(0, 45)|escape}}
+        {% else %}{{ movie.title|escape}}{% endif %}
+        </a></td>
+
+        <td>{{ movie.rating }}</td><td>{{ movie.imdb }}</td><td>{{ movie.icon }}</td>
+		<td><a href='editmovie.php?id={{ movie.id }}&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=440' class='thickbox' title='Ändra'>
+			<img src='img/icon/icon_edit.png' alt='' /></a></td>
+		
+		{% if loop.index0 is even %}
+           <td></td></tr>
+        {% else %}
+            <td class='tableright'>&nbsp;</td></tr>
+        {% endif %}
+
+    {% endfor %}
 <!--
 		if(!($i & 1))
 			echo "<tr class='odd'><td class='tableleft'>&nbsp;</td>";
