@@ -13,11 +13,18 @@ function db_connect()
 	$pdo = new PDO('mysql:host=localhost;dbname=ymdb;charset=utf8mb4', 'root', '');
 }
 
+function db_disconnect()
+{
+	global $pdo;
+	$pdo = null;
+}
+
 function db_query($query) 
 {
 	global $pdo;
-	$ret = $pdo->prepare($query);
-	return $ret;
+	$stmt = $pdo->prepare($query);
+	$stmt->execute();
+	return $stmt;
 }
 
 function db_fetch_array($res, $type=MYSQL_ASSOC) 
