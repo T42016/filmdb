@@ -11,55 +11,7 @@
 	
 	$uid = $_SESSION['user_id'];
 	$_SESSION['url'] = $_SERVER['QUERY_STRING'];
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">  
-<head> 
-	<meta http-equiv="Expires" content="0" /> 
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title>YMDB</title> 
-	<link rel="SHORTCUT ICON" href="favicon.ico" />
-	<link rel="stylesheet" href="css/default.css" type="text/css" /> 
-	<link rel="stylesheet" type="text/css" href="css/thickbox.css" media="screen" />
-	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/thickbox.js"></script>
-	<script type="text/javascript" src="js/jquery.simpletip-1.3.1.js"></script>	
-</head> 
-
-<body>
-<div id="allofit">
-<div><img src="img/panel_top.png" alt="top" /></div>
-<div id="top_content">
-	<div id="logo">
-		<div class="menu">
-			<ul>
-				<li class="medium"><a href="index.php">Hem</a></li>
-				<li class="large"><a href="addmovie.php?KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=440" class="thickbox" title="Lägg till">Lägg till</a></li>
-				<li class="large"><a href="locations.php?KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=740" class="thickbox" title="Hantera lagring">Lagring</a></li>
-				<li class="large"><a href="compare.php?KeepThis=true&amp;TB_iframe=true&amp;height=120&amp;width=340" class="thickbox" title="Jämför">Jämför</a></li>
-				<li class="large"><a href="logout.php">Logga ut</a></li>
-			</ul><br style="clear: both" />
-			<form action="index.php" method="get" class="search">
-				<input type="radio" name="tag" value="my"  />Mina
-				<input type="radio" checked="checked" name="tag" value="all" />Alla&nbsp;
-				<input class="search" name="text" type="text" />
-			</form>
-			<a href="addmultiplemovies.php?KeepThis=true&amp;TB_iframe=true&amp;height=320&amp;width=440" class="thickbox" title="Lägg till"><small>+flera</small></a>
-		</div>
-	</div>
-</div> <!-- end top_content -->
-<div class="divider"></div>
-
-<div id="content">
-
-<div class ="left">
-	<h1>Resultat</h1>
-	<p>
-		<a href="showposters.php?KeepThis=true&amp;TB_iframe=true&amp;height=620&amp;width=740" class="thickbox" title="Posters">Visa posters</a>
-	</p>
-<?php
 	db_connect();
 	
 	$order = "ORDER BY added DESC";
@@ -101,7 +53,7 @@
 	}
 	if(isset($_GET['text']))
 	{
-		echo "<p>Sökresultat efter '<b>". $_GET['text']."</b>'</p>";
+		#echo "<p>Sökresultat efter '<b>". $_GET['text']."</b>'</p>";
 		
 		$text = mysql_escape_string($_GET['text']);
 		
@@ -150,59 +102,28 @@
 	$_SESSION['query'] = $query;
 	$movieinfo = array();
 	$header = "";
-	
-	echo "<table class='list' cellspacing='0'>\n";
-	$i =0;
-	while($line = db_fetch_array($res))
+	$data = db_fetch_array($res);
+
+	foreach($data as $line)
 	{
-		$movieinfo[$line['id']] = $line;
-		
-		$rating = strpos($line['rating'],'.') === false && $line['rating'] != '' ? $line['rating'].'.0' : $line['rating'];
-		$icon = getIcon($line['format']);
-		$imdb = getImdbLink($line['imdb']);
-		
-		if($showHeaders == true && $header != $line['places_name'])
+		//$movieinfo[$line['id']] = $line;
+		$line['rating'] = strpos($line['rating'],'.') === false && $line['rating'] != '' ? $line['rating'].'.0' : $line['rating'];
+		$line['icon'] = getIcon($line['format']);
+		$line['imdb'] = getImdbLink($line['imdb']);
+	}
+		/*if($showHeaders == true && $header != $line['places_name'])
 		{
 			$header = $line['places_name'];
 			echo "<tr><td colspan='5'><h1>$header</h1></td></tr>\n";
-		}
+		}*/
 		
-		if(!($i & 1))
-			echo "<tr class='odd'><td class='tableleft'>&nbsp;</td>";
-		else
-			echo "<tr><td></td>";
-		
-		//echo "<td><img width='50' src='$line[poster]' alt='' /></td>";
-		
-		echo "<td><a id='id$line[id]' href='movie.php?id=$line[id]&amp;KeepThis=true&amp;TB_iframe=true&amp;height=380&amp;width=640' class='thickbox' title='Info'>";
-		if( strlen($line['title']) > 45)
-			echo stripslashes(substr($line['title'], 0, 45)).'..';
-		else
-			echo stripslashes($line['title']);
 			
-		echo "</a></td>";
-		
-		if($line['places_name'] != '')
-			$place = $line['places_name'];
-		else
-			$place = '(osorterad)';
-			
-		//echo "<td><img src='img/icon/icon_info.png' alt='' title='$line[user_name] - $place' /></td>";
-		echo "<td>$rating</td><td>$imdb</td><td>$icon</td>\n";
-		echo "<td><a href='editmovie.php?id=$line[id]&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=440' class='thickbox' title='Ändra'>
-			<img src='img/icon/icon_edit.png' alt='' /></a></td>";
-		
-		if(!($i & 1))
-			echo "<td class='tableright'>&nbsp;</td></tr>";
-		else
-			echo "<td></td></tr>";
-			
-		$i++;
-	}
-	
-	echo "</table>\n";
-	
+	require __DIR__ . '/vendor/autoload.php';
+	$loader = new Twig_Loader_Filesystem(__DIR__ .'/templates');
+	$twig = new Twig_Environment($loader, array('cache' => __DIR__ .'/cache', 'debug' => true));
+	echo $twig->render('start.twig', array('movies' => $data,));
 	//Add paging
+	/*
 	$totalpages = ceil($hits / $pagesize);
 	if($totalpages > 1)
 	{
@@ -217,22 +138,12 @@
 				echo "<a href='$url'>$i</a> ";
 			}
 		}
-	}
+	}*/
 	
-	echo "</p>";
-	
-	//db_disconnect();
-?>
-	
-</div> <!-- end left -->
+	//echo "</p>";
 
-<div class="feature">
-	<div class="featuretop"><img src="img/fetop.gif" alt="" /></div>
-	<div class="featurecontent">
-	<h1>Min lagring</h1>
-	
-	<?php
 		//Unsorted?
+		/*
 		$query = "SELECT places_name, places_id, COUNT(*) AS antal,
 					COUNT(CASE movies_ny.format WHEN 8 THEN movies_ny.id ELSE null END) AS svcd,
 					COUNT(CASE movies_ny.format WHEN 9 THEN movies_ny.id ELSE null END) AS divx,
@@ -290,39 +201,14 @@
 			if($line['hd'] > 0)
 				echo " hd ($line[hd]st) ";
 			echo "</p>";
-		}
+		}*/
 		
 		db_disconnect();
-	?>
 
-	<div class="clear">&nbsp;</div>
-	</div> <!-- end featurecontent -->
-	<div class="featurebottom"><img src="img/febottom.gif" alt="" /></div>
-</div> <!-- end feature -->
-
-
-<div id="footer">&copy;2009 Jonas Nilsson.</div>
-
-</div> <!-- end content -->
-
-<div><img src="img/panel_bot.gif" alt="bottom" /></div>
-</div> <!-- end allofit -->
-
-<script type="text/javascript">
-<!--
-$(document).ready(function(){
-	<?php
+		/*	
 		//Generate tooltip text
 		foreach($movieinfo as $key => $val)
 		{
 			echo "$('#id$key').simpletip({ fixed: false, showEffect: 'none', hideEffect: 'none', content: '".getToolTipText($val)."' });\n";
-		}
-	?>
-});
-// -->
-</script>
-	
-</body>
-
-</html>
-
+		}*/
+?>
