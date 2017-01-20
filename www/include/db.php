@@ -5,15 +5,17 @@
 	*/
 
 	
+$pdo = 0;
+
 function db_connect() 
 {
-	//Ändra till inställningar som passar de MySQL inställningar ni har.
+	//?ndra till inst?llningar som passar de MySQL inst?llningar ni har.
 	//
 	global $pdo;
 	$pdo = new PDO('mysql:host=localhost;dbname=ymdb;charset=utf8mb4', 'root', '');
 }
 
-function db_disconnect()
+function db_disconnect() 
 {
 	global $pdo;
 	$pdo = null;
@@ -40,8 +42,8 @@ function db_num_rows($res)
 /*
 function db_get_insert_id()
 {
-	global $db_handle;
-	return mysql_insert_id($db_handle);
+	global $pdo;
+	return mysql_insert_id($pdo);
 }
 function db_escape($text) 
 {
