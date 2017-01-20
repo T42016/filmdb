@@ -1,32 +1,34 @@
 <?php
 	session_start();
-	
-	if(!isset($_SESSION['user_loggedin']) ) 
+	echo "<pre>";
+	print_r($_SESSION);
+	echo "</pre>";
+	if(!isset($_SESSION['user_loggedin']) )
 	{
 		header('location: login.php');
 		exit;
 	}
 	require_once 'include/db.php';
 	require_once 'include/htmlfunctions.php';
-	
+
 	$uid = $_SESSION['user_id'];
 	$_SESSION['url'] = $_SERVER['QUERY_STRING'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">  
-<head> 
-	<meta http-equiv="Expires" content="0" /> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Expires" content="0" />
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title>YMDB</title> 
+	<title>YMDB</title>
 	<link rel="SHORTCUT ICON" href="favicon.ico" />
-	<link rel="stylesheet" href="css/default.css" type="text/css" /> 
+	<link rel="stylesheet" href="css/default.css" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="css/thickbox.css" media="screen" />
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/thickbox.js"></script>
-	<script type="text/javascript" src="js/jquery.simpletip-1.3.1.js"></script>	
-</head> 
+	<script type="text/javascript" src="js/jquery.simpletip-1.3.1.js"></script>
+</head>
 
 <body>
 <div id="allofit">
@@ -61,29 +63,29 @@
 	</p>
 <?php
 	db_connect();
-	
+
 	$order = "ORDER BY added DESC";
 	if(isset($_GET['imdb']))
 		$order = "ORDER BY rating DESC";
-		
+
 	//standard
-	$query = "SELECT * FROM movies_ny 
+	$query = "SELECT * FROM movies_ny
 				LEFT JOIN imdb_info ON movies_ny.imdb = imdb_info.imdb_info_id
 				LEFT JOIN users ON movies_ny.user_id = users.user_id
 				LEFT JOIN places ON movies_ny.location = places.places_id
 				$order";
-				
+
 	if(isset($_GET['place']))
 	{
 		$place = (int)$_GET['place'];
-		
+
 		$order = "ORDER BY movies_ny.title";
 		if(isset($_GET['imdb']))
 			$order = "ORDER BY rating DESC";
 		else if(isset($_GET['latest']))
 			$order = "ORDER BY added DESC";
-			
-		$query = "SELECT * FROM movies_ny 
+
+		$query = "SELECT * FROM movies_ny
 				LEFT JOIN imdb_info ON movies_ny.imdb = imdb_info.imdb_info_id
 				LEFT JOIN users ON movies_ny.user_id = users.user_id
 				LEFT JOIN places ON movies_ny.location = places.places_id
@@ -91,8 +93,8 @@
 				$order";
 	}
 	if(isset($_GET['unsorted']))
-	{	
-		$query = "SELECT * FROM movies_ny 
+	{
+		$query = "SELECT * FROM movies_ny
 				LEFT JOIN imdb_info ON movies_ny.imdb = imdb_info.imdb_info_id
 				LEFT JOIN users ON movies_ny.user_id = users.user_id
 				LEFT JOIN places ON movies_ny.location = places.places_id
@@ -102,15 +104,15 @@
 	if(isset($_GET['text']))
 	{
 		echo "<p>Sökresultat efter '<b>". $_GET['text']."</b>'</p>";
-		
+
 		$text = mysql_escape_string($_GET['text']);
-		
+
 		$query = "SELECT * FROM movies_ny
-				LEFT JOIN imdb_info ON movies_ny.imdb = imdb_info.imdb_info_id 
+				LEFT JOIN imdb_info ON movies_ny.imdb = imdb_info.imdb_info_id
 				LEFT JOIN users ON movies_ny.user_id = users.user_id
 				LEFT JOIN places ON movies_ny.location = places.places_id
 				WHERE (title LIKE '%$text%' OR imdb_info.name LIKE '%$text%')";
-		
+
 		if($_GET['tag'] == 'my')
 			$query .= " AND movies_ny.user_id = $uid ";
 		$query .= "ORDER BY movies_ny.title";
@@ -120,9 +122,9 @@
 		$user1 = (int)$_GET['user1'];
 		$user2 = (int)$_GET['user2'];
 		$showHeaders = true;
-		
-		$query= "SELECT * FROM `movies_ny` 
-				LEFT JOIN imdb_info ON movies_ny.imdb = imdb_info.imdb_info_id 
+
+		$query= "SELECT * FROM `movies_ny`
+				LEFT JOIN imdb_info ON movies_ny.imdb = imdb_info.imdb_info_id
 				LEFT JOIN users ON movies_ny.user_id = users.user_id
 				LEFT JOIN places ON movies_ny.location = places.places_id
 				WHERE movies_ny.user_id = $user1 AND format = 16
@@ -131,77 +133,77 @@
 				WHERE m2.user_id = $user2 AND m2.format = 16)
 				ORDER BY movies_ny.location, movies_ny.title";
 	}
-	
+
 	$pagesize = 50;
 	if(isset($_GET['page']))
-		$page = (int) $_GET['page'];	
+		$page = (int) $_GET['page'];
 	else
 		$page = 0;
-		
+
 	$offset = $pagesize * $page;
-	
+
 	//Paging calc
 	$res = db_query($query);
 	$hits = db_num_rows($res);
-	
+
 	//Add limit
 	$query .= " LIMIT $offset, $pagesize";
 	$res = db_query($query);
 	$_SESSION['query'] = $query;
 	$movieinfo = array();
 	$header = "";
-	
+
 	echo "<table class='list' cellspacing='0'>\n";
 	$i =0;
 	while($line = db_fetch_array($res))
 	{
 		$movieinfo[$line['id']] = $line;
-		
+
 		$rating = strpos($line['rating'],'.') === false && $line['rating'] != '' ? $line['rating'].'.0' : $line['rating'];
 		$icon = getIcon($line['format']);
 		$imdb = getImdbLink($line['imdb']);
-		
+
 		if($showHeaders == true && $header != $line['places_name'])
 		{
 			$header = $line['places_name'];
 			echo "<tr><td colspan='5'><h1>$header</h1></td></tr>\n";
 		}
-		
+
 		if(!($i & 1))
 			echo "<tr class='odd'><td class='tableleft'>&nbsp;</td>";
 		else
 			echo "<tr><td></td>";
-		
+
 		//echo "<td><img width='50' src='$line[poster]' alt='' /></td>";
-		
+
 		echo "<td><a id='id$line[id]' href='movie.php?id=$line[id]&amp;KeepThis=true&amp;TB_iframe=true&amp;height=380&amp;width=640' class='thickbox' title='Info'>";
 		if( strlen($line['title']) > 45)
 			echo stripslashes(substr($line['title'], 0, 45)).'..';
 		else
 			echo stripslashes($line['title']);
-			
+
 		echo "</a></td>";
-		
+
 		if($line['places_name'] != '')
 			$place = $line['places_name'];
 		else
 			$place = '(osorterad)';
-			
+
 		//echo "<td><img src='img/icon/icon_info.png' alt='' title='$line[user_name] - $place' /></td>";
 		echo "<td>$rating</td><td>$imdb</td><td>$icon</td>\n";
 		echo "<td><a href='editmovie.php?id=$line[id]&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=440' class='thickbox' title='Ändra'>
 			<img src='img/icon/icon_edit.png' alt='' /></a></td>";
-		
+
 		if(!($i & 1))
 			echo "<td class='tableright'>&nbsp;</td></tr>";
 		else
 			echo "<td></td></tr>";
-			
+
 		$i++;
 	}
-	
+
 	echo "</table>\n";
-	
+
 	//Add paging
 	$totalpages = ceil($hits / $pagesize);
 	if($totalpages > 1)
@@ -218,19 +220,19 @@
 			}
 		}
 	}
-	
+
 	echo "</p>";
-	
+
 	//db_disconnect();
 ?>
-	
+
 </div> <!-- end left -->
 
 <div class="feature">
 	<div class="featuretop"><img src="img/fetop.gif" alt="" /></div>
 	<div class="featurecontent">
 	<h1>Min lagring</h1>
-	
+
 	<?php
 		//Unsorted?
 		$query = "SELECT places_name, places_id, COUNT(*) AS antal,
@@ -239,13 +241,13 @@
 					COUNT(CASE movies_ny.format WHEN 10 THEN movies_ny.id ELSE null END) AS dvd,
 					COUNT(CASE movies_ny.format WHEN 11 THEN movies_ny.id ELSE null END) AS dvdr,
 					COUNT(CASE movies_ny.format WHEN 16 THEN movies_ny.id ELSE null END) AS hd
-					FROM places 
-					RIGHT JOIN movies_ny ON places_id = movies_ny.location 
+					FROM places
+					RIGHT JOIN movies_ny ON places_id = movies_ny.location
 					WHERE places_id IS NULL AND movies_ny.user_id = $uid
 					GROUP BY places_id
 					ORDER BY places_name";
 		$res = db_query($query);
-		
+
 		if(db_num_rows($res) > 0)
 		{
 			$line = db_fetch_array($res);
@@ -263,14 +265,14 @@
 				echo " hd ($line[hd]st) ";
 			echo "</p>";
 		}
-		
+
 		$query = "SELECT places_name, places_id, COUNT(*) AS antal,
 					COUNT(CASE movies_ny.format WHEN 8 THEN movies_ny.id ELSE null END) AS svcd,
 					COUNT(CASE movies_ny.format WHEN 9 THEN movies_ny.id ELSE null END) AS divx,
 					COUNT(CASE movies_ny.format WHEN 10 THEN movies_ny.id ELSE null END) AS dvd,
 					COUNT(CASE movies_ny.format WHEN 11 THEN movies_ny.id ELSE null END) AS dvdr,
 					COUNT(CASE movies_ny.format WHEN 16 THEN movies_ny.id ELSE null END) AS hd
-					FROM places 
+					FROM places
 					INNER JOIN movies_ny ON places_id = movies_ny.location AND places_userid = $uid
 					GROUP BY places_id
 					ORDER BY places_name";
@@ -291,7 +293,7 @@
 				echo " hd ($line[hd]st) ";
 			echo "</p>";
 		}
-		
+
 		db_disconnect();
 	?>
 
@@ -321,8 +323,7 @@ $(document).ready(function(){
 });
 // -->
 </script>
-	
+
 </body>
 
 </html>
-

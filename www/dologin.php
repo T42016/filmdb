@@ -1,33 +1,44 @@
-<?php	
+<?php
 	require_once 'include/db.php';
-	
-	db_connect();
 	session_start();
-		
+	db_connect();
+	echo "<pre>";
+	print_r($_SESSION);
+	echo "</pre>";
+
+
 	if(isset($_POST['userid']) && isset($_POST['password']))
 	{
-		$user = mysql_real_escape_string($_POST['userid']);
-		$pass = mysql_real_escape_string($_POST['password']);		
-		$query = "SELECT * FROM users WHERE user_name = '$user' AND user_passw = MD5('$pass')";
+		$user   = $_POST['userid'];
+		$pass 	= md5($_POST['password']);
 
-		$res = db_query($query);
-		if(db_num_rows($res) == 1)
+		$res = db_query("SELECT * FROM users WHERE user_name = :userid AND user_passw = :password",
+			array(
+			 ':userid' => $user,
+			 ':password' => $pass));
+
+
+		if ($res->rowCount() > 0)
 		{
-			$line = db_fetch_array($res);
-			$_SESSION['user_id'] = $line['user_id'];
-			//$_SESSION['user_level'] = $line['user_level'];
-			//$_SESSION['user_nick'] = $line['user_nick'];
-			$_SESSION['user_loggedin'] = 1;
+				$row = db_fetch_array($res);
+		    $_SESSION['user_id'] = $row['user_id'];
+			  $_SESSION['user_loggedin'] = 1;
+		    header('Location: index.php');
+
+
+
 		}
+				//Rerouting
 		else
 		{
-			$_SESSION['login_error'] = true;
+		    ?>
+		    <script type="text/javascript">
+		        alert("This account doesnt exist");
+		       </script>
+		       <?php
 		}
-			
+
 	}
-	
-	db_disconnect();
-	
-	header("Location: login.php");
-	exit;
+
+
 ?>
