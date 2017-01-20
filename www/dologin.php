@@ -18,30 +18,24 @@
 			 ':password' => $pass));
 
 
-		if ($res->rowCount() > 0)
-		{
-				$row = db_fetch_array($res);
-				print_r($row);
-
-				$_SESSION['user_loggedin'] = 1;
-				$_SESSION['user_id'] = $row[0];
-				print_r($_SESSION);
-				exit;
-		    header('Location: index.php');
-				exit;
-
-
-
-		}
+			 if(db_num_rows($res) == 1)
+	 		{
+	 			$line = db_fetch_array($res);
+	 			$_SESSION['user_id'] = $line['user_id'];
+	 			//$_SESSION['user_level'] = $line['user_level'];
+	 			//$_SESSION['user_nick'] = $line['user_nick'];
+	 			$_SESSION['user_loggedin'] = 1;
+	 		}
+	 		else
+	 		{
+	 			$_SESSION['login_error'] = true;
+				?>
+				<script type="text/javascript">
+						alert("This account doesnt exist");
+					 </script>
+					 <?php
+	 		}
 				//Rerouting
-		else
-		{
-		    ?>
-		    <script type="text/javascript">
-		        alert("This account doesnt exist");
-		       </script>
-		       <?php
-		}
 
 	}
 
