@@ -10,9 +10,9 @@
 	if(isset($_POST['userid']) && isset($_POST['password']))
 	{
 		$user   = $_POST['userid'];
-		$pass 	= md5($_POST['password']);
-
-		$res = db_query("SELECT * FROM users WHERE user_name = :userid AND user_passw = :password",
+		$pass 	= $_POST['password'];
+		$query = "SELECT * FROM users WHERE user_name = :userid AND user_passw = MD5(:password)";
+		$res = db_query($query,
 			array(
 			 ':userid' => $user,
 			 ':password' => $pass));
@@ -21,9 +21,14 @@
 		if ($res->rowCount() > 0)
 		{
 				$row = db_fetch_array($res);
-		    $_SESSION['user_id'] = $row['user_id'];
-			  $_SESSION['user_loggedin'] = 1;
+				print_r($row);
+
+				$_SESSION['user_loggedin'] = 1;
+				$_SESSION['user_id'] = $row[0];
+				print_r($_SESSION);
+				exit;
 		    header('Location: index.php');
+				exit;
 
 
 

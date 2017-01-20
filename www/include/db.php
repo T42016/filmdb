@@ -34,7 +34,6 @@ function db_query($query, $v = null)
 	global $dbh;
 
 	$stmt = $dbh->prepare($query);
-  echo $query;
 	#
 	if($v != null){
 		$stmt->execute($v);
