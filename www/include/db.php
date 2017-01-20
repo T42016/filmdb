@@ -27,16 +27,17 @@ function db_query($query)
 	return $stmt;
 }
 
-function db_fetch_array($res, $type=MYSQL_ASSOC) 
+function db_fetch_array($res) 
 {
-	return mysql_fetch_array($res, $type);
+	return $res->fetchAll();
 }
 
 function db_num_rows($res) 
 {
-	return mysql_num_rows($res);
+	return $res->rowCount();
 }
 
+/*
 function db_get_insert_id()
 {
 	global $db_handle;
@@ -54,4 +55,5 @@ function get_param($var, $type = "post")
 	// escape input string
 	return htmlspecialchars($temp);
 }
+*/
 ?>
