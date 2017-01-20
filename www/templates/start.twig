@@ -1,46 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% include 'header.twig' %}
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">  
-<head> 
-	<meta http-equiv="Expires" content="0" /> 
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title>YMDB</title> 
-	<link rel="SHORTCUT ICON" href="favicon.ico" />
-	<link rel="stylesheet" href="css/default.css" type="text/css" /> 
-	<link rel="stylesheet" type="text/css" href="css/thickbox.css" media="screen" />
-	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/thickbox.js"></script>
-	<script type="text/javascript" src="js/jquery.simpletip-1.3.1.js"></script>	
-</head> 
-
-<body>
-<div id="allofit">
-<div><img src="img/panel_top.png" alt="top" /></div>
-<div id="top_content">
-	<div id="logo">
-		<div class="menu">
-			<ul>
-				<li class="medium"><a href="index.php">Hem</a></li>
-				<li class="large"><a href="addmovie.php?KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=440" class="thickbox" title="Lägg till">Lägg till</a></li>
-				<li class="large"><a href="locations.php?KeepThis=true&amp;TB_iframe=true&amp;height=420&amp;width=740" class="thickbox" title="Hantera lagring">Lagring</a></li>
-				<li class="large"><a href="compare.php?KeepThis=true&amp;TB_iframe=true&amp;height=120&amp;width=340" class="thickbox" title="Jämför">Jämför</a></li>
-				<li class="large"><a href="logout.php">Logga ut</a></li>
-			</ul><br style="clear: both" />
-			<form action="index.php" method="get" class="search">
-				<input type="radio" name="tag" value="my"  />Mina
-				<input type="radio" checked="checked" name="tag" value="all" />Alla&nbsp;
-				<input class="search" name="text" type="text" />
-			</form>
-			<a href="addmultiplemovies.php?KeepThis=true&amp;TB_iframe=true&amp;height=320&amp;width=440" class="thickbox" title="Lägg till"><small>+flera</small></a>
-		</div>
-	</div>
-</div> <!-- end top_content -->
 <div class="divider"></div>
 
 <div id="content">
-
-
 
 <div class ="left">
 	<h1>Resultat</h1>
@@ -63,11 +25,8 @@
 		<td><a href='editmovie.php?id={{ movie.id }}&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=440' class='thickbox' title='Ändra'>
 			<img src='img/icon/icon_edit.png' alt='' /></a></td>
 		
-		{% if loop.index0 is even %}
-           <td></td></tr>
-        {% else %}
-            <td class='tableright'>&nbsp;</td></tr>
-        {% endif %}
+		{% if loop.index0 is even %}<td></td></tr>
+        {% else %}<td class='tableright'>&nbsp;</td></tr>{% endif %}
 
     {% endfor %}
 <!--
@@ -117,22 +76,12 @@
 	<div class="featurebottom"><img src="img/febottom.gif" alt="" /></div>
 
 </div> <!-- end feature -->
-<div id="footer">&copy;2009 Jonas Nilsson.</div>
-
-</div> <!-- end content -->
-
-<div><img src="img/panel_bot.gif" alt="bottom" /></div>
-</div> <!-- end allofit -->
 
 <script type="text/javascript">
-
 $(document).ready(function(){
 
 });
-
 </script>
-	
-</body>
 
-</html>
+{% include 'footer.twig' %}
 
