@@ -46,13 +46,6 @@
 		</p></td></tr>
 		</table>
 		</form>
-		<?php
-		if(isset($_SESSION['login_error']))
-		{
-			echo "<p style='margin-top: 10px;'><span class='error'>Felaktigt användarnamn eller lösenord!</span></p>";
-			unset($_SESSION['login_error']);
-		}
-		?>
 		</div> <!-- end login -->
 	</div>
 </div> <!-- end top_content -->

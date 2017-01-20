@@ -3,31 +3,36 @@
 	
 	db_connect();
 	session_start();
+	
+	    // om man trycker på knappen sign-in.
+        if (isset($_POST['userid']) && isset($_POST['password'])) 
+        {
+            // hämtar och sätter variabler.
+            $user = $_POST['userid'];
+			$pass = $_POST['password'];	
+            
+            //jämnför variablerna med information från databasen.
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE user_name = '$user' AND user_passw = MD5('$pass')");
+            
+			$stmt->bindParam(':username',$user);
+            $stmt->bindParam(':password',$pass);
+            
+            $stmt->execute();
+            
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($stmt->rowCount() > 0) 
+            {
+                $_SESSION['user_loggedin'] = 1;
+				$_SESSION['user_id'] = $row['user_id'];
+                header('Location:index.php');
+            }
+            else
+            {
+				
+            }
+        }
 		
-	if(isset($_POST['userid']) && isset($_POST['password']))
-	{
-		$user = mysql_real_escape_string($_POST['userid']);
-		$pass = mysql_real_escape_string($_POST['password']);		
-		$query = "SELECT * FROM users WHERE user_name = '$user' AND user_passw = MD5('$pass')";
-
-		$res = db_query($query);
-		if(db_num_rows($res) == 1)
-		{
-			$line = db_fetch_array($res);
-			$_SESSION['user_id'] = $line['user_id'];
-			//$_SESSION['user_level'] = $line['user_level'];
-			//$_SESSION['user_nick'] = $line['user_nick'];
-			$_SESSION['user_loggedin'] = 1;
-		}
-		else
-		{
-			$_SESSION['login_error'] = true;
-		}
-			
-	}
-	
-	db_disconnect();
-	
 	header("Location: login.php");
 	exit;
 ?>
