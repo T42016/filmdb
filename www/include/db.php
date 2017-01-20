@@ -34,11 +34,18 @@
 		mysql_close($db_handle);*/
 	}
 
-	function db_query($query)
+	function db_query($query, $bindings = null)
 	{
 		global $db;
 		$stmt = $db->prepare($query);
-        $stmt->execute();
+
+		if ($bindings == null) {
+			$stmt->execute();
+		}
+		else {
+            $stmt->execute($bindings);
+		}
+
 		return $stmt;
 		/*$ret = mysql_query($query) or die("query failed : " . mysql_error());
 		return $ret;*/
@@ -52,7 +59,7 @@
 
 	function db_num_rows($res)
 	{
-		return count($res);
+		return $res->rowCount();
 		//return mysql_num_rows($res);
 	}
 
@@ -61,6 +68,7 @@
 		global $db;
 		return $db->lastInsertId();;
 	}
+
 	function db_escape($text)
 	{
 		return "'".mysql_escape_string($text)."'";

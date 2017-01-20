@@ -34,9 +34,9 @@
 <?php
 $i =0;
 
-echo "<pre>";
+/*echo "<pre>";
 print_r(db_fetch_array($res));
-echo "</pre>";
+echo "</pre>";*/
 
 while($line = db_fetch_array($res))
 {

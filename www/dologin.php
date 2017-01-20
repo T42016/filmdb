@@ -5,16 +5,18 @@
 		
 	if(isset($_POST['userid']) && isset($_POST['password']))
 	{
-        $db = new PDO('mysql:host=localhost;dbname=ymdb;charset=utf8mb4', 'root', '');
-        $stmt = $db->prepare('SELECT * FROM users WHERE user_name = :user AND user_passw = :password');
-        $stmt->bindParam(':user', $_POST['userid'], PDO::PARAM_INT);
-        $stmt->bindParam('password', md5($_POST['password']), PDO::PARAM_STR);
-        $stmt->execute();
-        $res = $stmt->fetch();
+	    db_connect();
 
-		if(count($res) > 0)
+        $user = $_POST['userid'];
+        $password = $_POST['password'];
+        $query = 'SELECT * FROM users WHERE user_name = :userid AND user_passw = MD5(:password)';
+        $res = db_query($query, array(':userid' => $user, ':password' => $password));
+
+		if(db_num_rows($res) > 0)
 		{
-			$_SESSION['user_id'] = (int) $res['user_id'];
+		    $line = db_fetch_array($res);
+            $_SESSION['user_id'] = $line[0];
+            //$_SESSION['user_id'] = $line['user_id'];
 			//$_SESSION['user_level'] = $line['user_level'];
 			//$_SESSION['user_nick'] = $line['user_nick'];
 			$_SESSION['user_loggedin'] = 1;
@@ -23,6 +25,8 @@
 		{
 			$_SESSION['login_error'] = true;
 		}
+
+		db_disconnect();
 	}
 
 	header("Location: login.php");

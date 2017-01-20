@@ -5,32 +5,56 @@
     print_r($_SESSION);
     echo "</pre>";
 
+    require __DIR__.'/vendor/autoload.php';
+    $loader = new Twig_Loader_Filesystem(__DIR__.'/templates');
+    $twig = new Twig_Environment($loader, array('debug' => true));
+
 	if(!isset($_SESSION['user_loggedin']) ) 
 	{
 		header('location: login.php');
 		exit;
 	}
+
 	require_once 'include/db.php';
 	require_once 'include/htmlfunctions.php';
 	
 	$uid = $_SESSION['user_id'];
 	$_SESSION['url'] = $_SERVER['QUERY_STRING'];
+
+    // List Movies
+    db_connect();
+
+    $order = "ORDER BY added DESC";
+    if(isset($_GET['imdb']))
+        $order = "ORDER BY rating DESC";
+
+    //standard
+    $query = "SELECT * FROM movies_ny 
+                        LEFT JOIN imdb_info ON movies_ny.imdb = imdb_info.imdb_info_id
+                        LEFT JOIN users ON movies_ny.user_id = users.user_id
+                        LEFT JOIN places ON movies_ny.location = places.places_id
+                        ORDER BY :orderBy;";
+    $res = db_query($query, array(':orderBy' => $order));
+
+	echo $twig->render('index.twig', array('movies' => db_fetch_array($res)));
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+
+
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">  
-<head> 
-	<meta http-equiv="Expires" content="0" /> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Expires" content="0" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>YMDB</title> 
+	<title>YMDB</title>
 	<link rel="SHORTCUT ICON" href="favicon.ico" />
-	<link rel="stylesheet" href="css/default.css" type="text/css" /> 
+	<link rel="stylesheet" href="css/default.css" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="css/thickbox.css" media="screen" />
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/thickbox.js"></script>
-	<script type="text/javascript" src="js/jquery.simpletip-1.3.1.js"></script>	
-</head> 
+	<script type="text/javascript" src="js/jquery.simpletip-1.3.1.js"></script>
+</head>
 
 <body>
 <div id="allofit">
@@ -53,7 +77,7 @@
 			<a href="addmultiplemovies.php?KeepThis=true&amp;TB_iframe=true&amp;height=320&amp;width=440" class="thickbox" title="Lägg till"><small>+flera</small></a>
 		</div>
 	</div>
-</div> <!-- end top_content -->
+</div>
 <div class="divider"></div>
 
 <div id="content">
@@ -62,8 +86,10 @@
 	<h1>Resultat</h1>
 	<p>
 		<a href="showposters.php?KeepThis=true&amp;TB_iframe=true&amp;height=620&amp;width=740" class="thickbox" title="Posters">Visa posters</a>
-	</p>
-<?php
+	</p> -->
+
+
+<?php /*
 	db_connect();
 	
 	$order = "ORDER BY added DESC";
@@ -227,14 +253,14 @@
 	
 	//db_disconnect();
 ?>
-	
-</div> <!-- end left -->
+<!--
+</div>
 
 <div class="feature">
 	<div class="featuretop"><img src="img/fetop.gif" alt="" /></div>
 	<div class="featurecontent">
-	<h1>Min lagring</h1>
-	
+	<h1>Min lagring</h1> -->
+
 	<?php
 		//Unsorted?
 		$query = "SELECT places_name, places_id, COUNT(*) AS antal,
@@ -298,22 +324,22 @@
 		
 		db_disconnect();
 	?>
-
+<!---
 	<div class="clear">&nbsp;</div>
-	</div> <!-- end featurecontent -->
+	</div>
 	<div class="featurebottom"><img src="img/febottom.gif" alt="" /></div>
-</div> <!-- end feature -->
+</div>
 
 
 <div id="footer">&copy;2009 Jonas Nilsson.</div>
 
-</div> <!-- end content -->
+</div>
 
 <div><img src="img/panel_bot.gif" alt="bottom" /></div>
-</div> <!-- end allofit -->
+</div>
 
 <script type="text/javascript">
-<!--
+
 $(document).ready(function(){
 	<?php
 		//Generate tooltip text
@@ -323,10 +349,9 @@ $(document).ready(function(){
 		}
 	?>
 });
-// -->
+
 </script>
-	
+
 </body>
 
-</html>
-
+</html> */
