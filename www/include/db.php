@@ -20,11 +20,16 @@ function db_disconnect()
 	$db_handle = null;
 }
 
-function db_query($query) 
+function db_query($query, $bindings = null) 
 {
 	global $db_handle;
 	$stmt = $db_handle->prepare($query);
-	$stmt->execute();
+
+	if($bindings == null)
+		$stmt->execute();
+	else
+		$stmt->execute($bindings);
+
 	return $stmt;
 }
 

@@ -8,9 +8,9 @@
 	{
 		$user = ($_POST['userid']);
 		$pass = ($_POST['password']);		
-		$query = "SELECT * FROM users WHERE user_name = '$user' AND user_passw = MD5('$pass')";
+		$query = "SELECT * FROM users WHERE user_name = :userid AND user_passw = MD5(:password)";
+		$res = db_query($query, array(':userid' => $user, ':password' => $pass));
 
-		$res = db_query($query);
 		if(db_num_rows($res) == 1)
 		{
 			$line = db_fetch_array($res);
