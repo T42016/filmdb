@@ -9,13 +9,10 @@
 
 	if(isset($_POST['userid']) && isset($_POST['password']))
 	{
-		$user   = $_POST['userid'];
-		$pass 	= $_POST['password'];
+		$user = ($_POST['userid']);
+		$pass = ($_POST['password']);
 		$query = "SELECT * FROM users WHERE user_name = :userid AND user_passw = MD5(:password)";
-		$res = db_query($query,
-			array(
-			 ':userid' => $user,
-			 ':password' => $pass));
+		$res = db_query($query, array(':userid' => $user, ':password' => $pass));
 
 
 			 if(db_num_rows($res) == 1)
